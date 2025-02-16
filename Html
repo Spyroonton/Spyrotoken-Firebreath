@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPYRO Mini App</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body { text-align: center; font-family: Arial, sans-serif; background-color: #222; color: white; }
+        canvas { background: black; display: block; margin: auto; }
+        button { padding: 10px 20px; font-size: 18px; margin-top: 20px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>SPYRO Mini App</h1>
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+    <button id="fireButton">🔥 Feuer speien!</button>
+    <script>
+        let tg = window.Telegram.WebApp;
+        tg.expand();
+
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+
+        let dragon = { x: 350, y: 500, width: 100, height: 100, img: new Image() };
+        dragon.img.src = "/mnt/data/A_cartoon-style_first-person_perspective_of_a_drag.png";
+        
+        let fire = null;
+        let crates = [
+            { x: 300, y: 250, width: 60, height: 60, health: 3, img: new Image() },
+            { x: 450, y: 250, width: 60, height: 60, health: 3, img: new Image() }
+        ];
+        crates.forEach(crate => crate.img.src = "/mnt/data/A_cartoon-style_treasure_chest_with_a_fantasy_desi.png");
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Drachenflügel darstellen (First-Person-Perspektive)
+            ctx.drawImage(dragon.img, dragon.x, dragon.y, dragon.width, dragon.height);
+            
+            // Kisten zeichnen
+            crates.forEach(crate => {
+                if (crate.health > 0) {
+                    ctx.drawImage(crate.img, crate.x, crate.y, crate.width, crate.height);
+                }
+            });
+            
+            // Feuer zeichnen
+            if (fire) {
+                ctx.fillStyle = "orange";
+                ctx.fillRect(fire.x, fire.y, fire.width, fire.height);
+                fire.y -= 10;
+                
+                crates.forEach(crate => {
+                    if (fire && fire.y < crate.y + crate.height && fire.x > crate.x && fire.x < crate.x + crate.width) {
+                        fire = null;
+                        crate.health -= 1;
+                        if (crate.health <= 0) {
+                            crate.x = Math.random() * 700;
+                            crate.health = 3;
+                        }
+                    }
+                });
+            }
+            requestAnimationFrame(draw);
+        }
+
+        document.getElementById("fireButton").addEventListener("click", function() {
+            if (!fire) {
+                fire = { x: 400, y: 500, width: 20, height: 40 };
+            }
+        });
+
+        draw();
+    </script>
+</body>
+</html>

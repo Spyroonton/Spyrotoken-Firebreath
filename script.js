@@ -4,19 +4,29 @@ tg.expand();
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
-let dragon = { x: 350, y: 500, width: 100, height: 100, img: new Image() };
-dragon.img.src = "dragon.png";
+// Hintergrundbild einfügen
+let background = new Image();
+background.src = "/mnt/data/A_cartoon-style_fantasy_landscape_seen_from_a_firs.png";
 
+// Drachenflügel & Hörner für Ich-Perspektive
+let dragon = { x: 350, y: 500, width: 100, height: 100, img: new Image() };
+dragon.img.src = "/mnt/data/A_cartoon-style_first-person_perspective_of_a_drag.png";
+
+// Feueranimation
 let fire = null;
+let fireImg = new Image();
+fireImg.src = "fire.png"; // Ersetze mit deiner Feuer-Grafik
+
+// Schatzkisten mit verschiedenen Schadensstufen
 let crates = [
     { x: 300, y: 250, width: 60, height: 60, health: 3, img: new Image() },
     { x: 450, y: 250, width: 60, height: 60, health: 3, img: new Image() }
 ];
-crates.forEach(crate => crate.img.src = "crate.png");
+crates.forEach(crate => crate.img.src = "/mnt/data/A_cartoon-style_treasure_chest_with_a_fantasy_desi.png");
 
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
+    ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
     ctx.drawImage(dragon.img, dragon.x, dragon.y, dragon.width, dragon.height);
     
     crates.forEach(crate => {
@@ -26,8 +36,7 @@ function draw() {
     });
     
     if (fire) {
-        ctx.fillStyle = "orange";
-        ctx.fillRect(fire.x, fire.y, fire.width, fire.height);
+        ctx.drawImage(fireImg, fire.x, fire.y, fire.width, fire.height);
         fire.y -= 10;
         
         crates.forEach(crate => {

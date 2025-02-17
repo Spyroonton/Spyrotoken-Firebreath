@@ -56,11 +56,10 @@
       background-size: contain;
       cursor: pointer;
       z-index: 2;
-      /* Entferne Standard-Button-Stile */
       padding: 0;
       outline: none;
     }
-    /* Stil für die gespawnten Flammen */
+    /* Stil für die erzeugte Flamme */
     .flame {
       position: absolute;
       width: 200px;
@@ -105,20 +104,26 @@
         const flame = document.createElement('div');
         flame.classList.add('flame');
         
-        // Hole die Position des Buttons
+        // Hole Button- und Container-Daten
         const btn = document.getElementById('dragonButton');
+        const container = document.getElementById('container');
         const btnRect = btn.getBoundingClientRect();
-        const containerRect = document.getElementById('container').getBoundingClientRect();
+        const containerRect = container.getBoundingClientRect();
         
-        // Berechne die Position relativ zum Container
-        // Die Flamme startet in der Mitte des Buttons
-        const startX = btnRect.left - containerRect.left + (btnRect.width / 2) - 25; // 25 = halbe Breite der Flamme (50px/2)
-        const startY = btnRect.top - containerRect.top + (btnRect.height / 2) - 25;
+        // Flammengröße, wie in .flame definiert
+        const flameWidth = 200;
+        const flameHeight = 200;
+        
+        // Berechne die horizontale Mitte des Buttons relativ zum Container:
+        // (Button-Linksposition relativ zum Container + halbe Buttonbreite) minus halbe Flammenbreite
+        const startX = btnRect.left - containerRect.left + (btnRect.width / 2) - (flameWidth / 2);
+        // Die Flamme soll so starten, dass ihre untere Kante an der Oberkante des Buttons liegt:
+        const startY = btnRect.top - containerRect.top - flameHeight;
         
         flame.style.left = startX + 'px';
         flame.style.top = startY + 'px';
         
-        document.getElementById('container').appendChild(flame);
+        container.appendChild(flame);
         
         // Entferne die Flamme nach Abschluss der Animation
         flame.addEventListener('animationend', function() {
@@ -126,11 +131,9 @@
         });
       }
       
-      // Beim Klick auf den Button werden mehrere Flammen nacheinander erzeugt
+      // Beim Klick auf den Button wird genau eine Flamme erzeugt
       document.getElementById('dragonButton').addEventListener('click', function() {
-        for (let i = 0; i < 10; i++) {
-          setTimeout(spawnFlame, i * 100);
-        }
+        spawnFlame();
       });
     });
   </script>

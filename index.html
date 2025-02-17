@@ -2,7 +2,8 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>Spyrotoken-Firebreath Work in progress</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spyrotoken-Firebreath</title>
   <style>
     /* Grundlegende Einstellungen */
     body, html {
@@ -22,33 +23,48 @@
       background-size: cover;
       background-position: center;
     }
-    /* Text-Overlay */
+    /* Overlay-Text-Container */
     #overlayText {
       position: absolute;
-      top: 20px;
+      top: 5%;
       width: 100%;
       text-align: center;
-      font-size: 36px;
+      z-index: 2;
+    }
+    /* Titel */
+    #overlayText h1 {
+      font-size: 6vw;
       color: white;
       text-shadow: 2px 2px 5px black;
-      z-index: 2;
+      margin: 0;
+      padding: 0;
+    }
+    /* Subtitel */
+    #overlayText p {
+      font-size: 4vw;
+      color: white;
+      text-shadow: 2px 2px 5px black;
+      margin: 5px 0 0 0;
+      padding: 0;
     }
     /* Dragonbreath-Button */
     #dragonButton {
       position: absolute;
-      bottom: 20px;
+      bottom: 5%;
       left: 50%;
       transform: translateX(-50%);
-      padding: 12px 24px;
-      font-size: 24px;
+      padding: 1em 2em;
+      font-size: 5vw;
       cursor: pointer;
       z-index: 2;
     }
     /* Flammen-Element */
     .flame {
       position: absolute;
-      width: 80px;
-      height: 80px;
+      width: 20vw;
+      height: 20vw;
+      max-width: 100px;
+      max-height: 100px;
       background-image: url('https://example.com/deine-flamme.gif'); /* Hier deinen Flammen-GIF-Pfad einfügen */
       background-size: contain;
       background-repeat: no-repeat;
@@ -63,11 +79,11 @@
         opacity: 1;
       }
       50% {
-        transform: translate(200px, -100px) scale(1.2);
+        transform: translate(50vw, -20vh) scale(1.2);
         opacity: 1;
       }
       100% {
-        transform: translate(400px, -200px) scale(0.5);
+        transform: translate(100vw, -40vh) scale(0.5);
         opacity: 0;
       }
     }
@@ -75,37 +91,12 @@
 </head>
 <body>
   <div id="container">
-    <div id="overlayText">Spyrotoken-Firebreath</div>
+    <div id="overlayText">
+      <h1>Spyrotoken-Firebreath</h1>
+      <p>Work in Progress</p>
+    </div>
     <button id="dragonButton">Dragonbreath!</button>
   </div>
-  
-  <script>
-    // Funktion, um eine einzelne Flamme zu erzeugen
-    function spawnFlame() {
-      const flame = document.createElement('div');
-      flame.classList.add('flame');
-      // Zufällige vertikale Startposition innerhalb eines bestimmten Bereichs
-      const startY = Math.random() * (window.innerHeight * 0.3) + (window.innerHeight * 0.5);
-      flame.style.left = '-80px'; // Startet links außerhalb des Bildschirms
-      flame.style.top = startY + 'px';
-      
-      document.getElementById('container').appendChild(flame);
-      
-      // Entferne die Flamme nach Ende der Animation
-      flame.addEventListener('animationend', () => flame.remove());
-    }
-    
-    // Beim Klick auf den Button werden mehrere Flammen in schneller Folge erzeugt
-    document.getElementById('dragonButton').addEventListener('click', () => {
-      let flameCount = 10; // Anzahl der zu erzeugenden Flammen
-      const interval = setInterval(() => {
-        spawnFlame();
-        flameCount--;
-        if (flameCount <= 0) {
-          clearInterval(interval);
-        }
-      }, 100); // alle 100 Millisekunden wird eine neue Flamme erzeugt
-    });
-  </script>
+  <script src="code.js"></script>
 </body>
 </html>

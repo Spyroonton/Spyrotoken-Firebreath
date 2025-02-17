@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Work in progress</title>
+  <title>Spyrotoken-Firebreath</title>
   <style>
     /* Grundlegende Einstellungen */
     body, html {
@@ -19,7 +19,8 @@
       position: relative;
       width: 100%;
       height: 100%;
-      background-image: url('Hintergrund.WEBP'); /* Hier deinen Bildpfad einfügen */
+      /* Beispielhintergrund – passe den Pfad falls nötig an */
+      background-image: url('Hintergrund.WEBP');
       background-size: cover;
       background-position: center;
     }
@@ -65,7 +66,8 @@
       height: 20vw;
       max-width: 100px;
       max-height: 100px;
-      background-image: url('Flame.gif'); /* Hier deinen Flammen-GIF-Pfad einfügen */
+      /* Verwende Flame.gif aus dem selben Ordner */
+      background-image: url('Flame.gif');
       background-size: contain;
       background-repeat: no-repeat;
       pointer-events: none;
@@ -85,36 +87,7 @@
       100% {
         transform: translate(100vw, -40vh) scale(0.5);
         opacity: 0;
-     }
-    document.addEventListener('DOMContentLoaded', function() {
-  // Funktion, um eine einzelne Flamme zu erzeugen
-  function spawnFlame() {
-    const flame = document.createElement('div');
-    flame.classList.add('flame');
-    
-    // Zufällige vertikale Startposition innerhalb eines bestimmten Bereichs
-    const startY = Math.random() * (window.innerHeight * 0.3) + (window.innerHeight * 0.5);
-    flame.style.left = '-20vw'; // Startet links außerhalb des Bildschirms
-    flame.style.top = startY + 'px';
-    
-    document.getElementById('container').appendChild(flame);
-    
-    // Entferne die Flamme nach Ende der Animation
-    flame.addEventListener('animationend', () => flame.remove());
-  }
-  
-  // Event-Listener für den Button
-  document.getElementById('dragonButton').addEventListener('click', () => {
-    let flameCount = 10; // Anzahl der zu erzeugenden Flammen
-    const interval = setInterval(() => {
-      spawnFlame();
-      flameCount--;
-      if (flameCount <= 0) {
-        clearInterval(interval);
       }
-    }, 100); // alle 100 Millisekunden wird eine neue Flamme erzeugt
-  });
-});
     }
   </style>
 </head>
@@ -126,6 +99,38 @@
     </div>
     <button id="dragonButton">Dragonbreath!</button>
   </div>
-  <script src="code.js"></script>
+
+  <script>
+    // Warte, bis das DOM vollständig geladen ist
+    document.addEventListener('DOMContentLoaded', function() {
+      // Funktion, um eine einzelne Flamme zu erzeugen
+      function spawnFlame() {
+        const flame = document.createElement('div');
+        flame.classList.add('flame');
+        
+        // Zufällige vertikale Startposition innerhalb eines bestimmten Bereichs
+        const startY = Math.random() * (window.innerHeight * 0.3) + (window.innerHeight * 0.5);
+        flame.style.left = '-20vw'; // Startet links außerhalb des Bildschirms
+        flame.style.top = startY + 'px';
+        
+        document.getElementById('container').appendChild(flame);
+        
+        // Entferne die Flamme nach Ende der Animation
+        flame.addEventListener('animationend', () => flame.remove());
+      }
+      
+      // Event-Listener für den Button
+      document.getElementById('dragonButton').addEventListener('click', () => {
+        let flameCount = 10; // Anzahl der zu erzeugenden Flammen
+        const interval = setInterval(() => {
+          spawnFlame();
+          flameCount--;
+          if (flameCount <= 0) {
+            clearInterval(interval);
+          }
+        }, 100); // alle 100 Millisekunden wird eine neue Flamme erzeugt
+      });
+    });
+  </script>
 </body>
 </html>

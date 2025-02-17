@@ -1,77 +1,111 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SPYRO Mini App</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <style>
-        body { text-align: center; font-family: Arial, sans-serif; background-color: #222; color: white; }
-        canvas { background: black; display: block; margin: auto; }
-        button { padding: 10px 20px; font-size: 18px; margin-top: 20px; cursor: pointer; }
-    </style>
+  <meta charset="UTF-8">
+  <title>Spyrotoken-Firebreath</title>
+  <style>
+    /* Grundlegende Einstellungen */
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+      font-family: sans-serif;
+      background: #000;
+    }
+    /* Container mit Hintergrundbild */
+    #container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      background-image: url('https://example.com/dein-hintergrundbild.jpg'); /* Hier deinen Bildpfad einfügen */
+      background-size: cover;
+      background-position: center;
+    }
+    /* Text-Overlay */
+    #overlayText {
+      position: absolute;
+      top: 20px;
+      width: 100%;
+      text-align: center;
+      font-size: 36px;
+      color: white;
+      text-shadow: 2px 2px 5px black;
+      z-index: 2;
+    }
+    /* Dragonbreath-Button */
+    #dragonButton {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 12px 24px;
+      font-size: 24px;
+      cursor: pointer;
+      z-index: 2;
+    }
+    /* Flammen-Element */
+    .flame {
+      position: absolute;
+      width: 80px;
+      height: 80px;
+      background-image: url('https://example.com/deine-flamme.gif'); /* Hier deinen Flammen-GIF-Pfad einfügen */
+      background-size: contain;
+      background-repeat: no-repeat;
+      pointer-events: none;
+      z-index: 1;
+      animation: fly 2s linear forwards;
+    }
+    /* Animations-Definition für die Flamme */
+    @keyframes fly {
+      0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+      }
+      50% {
+        transform: translate(200px, -100px) scale(1.2);
+        opacity: 1;
+      }
+      100% {
+        transform: translate(400px, -200px) scale(0.5);
+        opacity: 0;
+      }
+    }
+  </style>
 </head>
 <body>
-    <h1>SPYRO Mini App</h1>
-    <canvas id="gameCanvas" width="800" height="600"></canvas>
-    <button id="fireButton">🔥 Feuer speien!</button>
-    <script>
-        let tg = window.Telegram.WebApp;
-        tg.expand();
-
-        const canvas = document.getElementById("gameCanvas");
-        const ctx = canvas.getContext("2d");
-
-        let dragon = { x: 350, y: 500, width: 100, height: 100, img: new Image() };
-        dragon.img.src = "/mnt/data/A_cartoon-style_first-person_perspective_of_a_drag.png";
-        
-        let fire = null;
-        let crates = [
-            { x: 300, y: 250, width: 60, height: 60, health: 3, img: new Image() },
-            { x: 450, y: 250, width: 60, height: 60, health: 3, img: new Image() }
-        ];
-        crates.forEach(crate => crate.img.src = "/mnt/data/A_cartoon-style_treasure_chest_with_a_fantasy_desi.png");
-
-        function draw() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            // Drachenflügel darstellen (First-Person-Perspektive)
-            ctx.drawImage(dragon.img, dragon.x, dragon.y, dragon.width, dragon.height);
-            
-            // Kisten zeichnen
-            crates.forEach(crate => {
-                if (crate.health > 0) {
-                    ctx.drawImage(crate.img, crate.x, crate.y, crate.width, crate.height);
-                }
-            });
-            
-            // Feuer zeichnen
-            if (fire) {
-                ctx.fillStyle = "orange";
-                ctx.fillRect(fire.x, fire.y, fire.width, fire.height);
-                fire.y -= 10;
-                
-                crates.forEach(crate => {
-                    if (fire && fire.y < crate.y + crate.height && fire.x > crate.x && fire.x < crate.x + crate.width) {
-                        fire = null;
-                        crate.health -= 1;
-                        if (crate.health <= 0) {
-                            crate.x = Math.random() * 700;
-                            crate.health = 3;
-                        }
-                    }
-                });
-            }
-            requestAnimationFrame(draw);
+  <div id="container">
+    <div id="overlayText">Spyrotoken-Firebreath</div>
+    <button id="dragonButton">Dragonbreath!</button>
+  </div>
+  
+  <script>
+    // Funktion, um eine einzelne Flamme zu erzeugen
+    function spawnFlame() {
+      const flame = document.createElement('div');
+      flame.classList.add('flame');
+      // Zufällige vertikale Startposition innerhalb eines bestimmten Bereichs
+      const startY = Math.random() * (window.innerHeight * 0.3) + (window.innerHeight * 0.5);
+      flame.style.left = '-80px'; // Startet links außerhalb des Bildschirms
+      flame.style.top = startY + 'px';
+      
+      document.getElementById('container').appendChild(flame);
+      
+      // Entferne die Flamme nach Ende der Animation
+      flame.addEventListener('animationend', () => flame.remove());
+    }
+    
+    // Beim Klick auf den Button werden mehrere Flammen in schneller Folge erzeugt
+    document.getElementById('dragonButton').addEventListener('click', () => {
+      let flameCount = 10; // Anzahl der zu erzeugenden Flammen
+      const interval = setInterval(() => {
+        spawnFlame();
+        flameCount--;
+        if (flameCount <= 0) {
+          clearInterval(interval);
         }
-
-        document.getElementById("fireButton").addEventListener("click", function() {
-            if (!fire) {
-                fire = { x: 400, y: 500, width: 20, height: 40 };
-            }
-        });
-
-        draw();
-    </script>
+      }, 100); // alle 100 Millisekunden wird eine neue Flamme erzeugt
+    });
+  </script>
 </body>
 </html>
